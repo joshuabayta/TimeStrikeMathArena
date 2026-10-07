@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080c18" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="TimeStrike" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <title>TimeStrike: Math Arena</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">TS</span><div><b>TIMESTRIKE</b><small>MATH ARENA</small></div></div>
+      <div class="top-actions">
+        <button class="icon-btn" id="installBtn" title="Install TimeStrike" hidden>📲</button>
+        <button class="icon-btn" id="soundBtn" title="Toggle sound">🔊</button>
+        <button class="icon-btn" id="helpBtn" title="How to play">?</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="screen-menu" class="screen active">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="eyebrow">DISCRETE MATHEMATICS // 2026</div>
+            <h1>TIME<span>STRIKE</span></h1>
+            <p class="tagline">THINK FAST. CALCULATE FASTER.</p>
+            <p class="intro">A retro arcade math battle built around number systems, counting, probability, proofs, Boolean algebra, K-maps, and matrices.</p>
+            <div class="menu-buttons">
+              <button class="main-btn" id="soloBtn">▶ SOLO CAMPAIGN</button>
+              <button class="main-btn alt" id="multiBtn">⚔ LOCAL MULTIPLAYER</button>
+              <button class="main-btn dark" id="practiceBtn">◈ PRACTICE LAB</button>
+              <button class="main-btn dark" id="leaderBtn">🏆 LEADERBOARD</button>
+            </div>
+          </div>
+          <div class="arcade-card">
+            <div class="screen-glow"></div>
+            <div class="pixel-title">MATH // SYSTEM</div>
+            <div class="terminal-lines">
+              <p>&gt; SYSTEM READY_</p><p>&gt; 7 TOPICS LOADED</p><p>&gt; SPEED TEST ONLINE</p><p>&gt; PRESS START</p>
+            </div>
+            <div class="mini-stats"><span>QUESTIONS <b>6+</b></span><span>PLAYERS <b>1–3</b></span><span>TIME <b>10–30s</b></span></div>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div><b>⏱ TIMED</b><small>Speed matters</small></div><div><b>♥ 2 STRIKES</b><small>Multiplayer elimination</small></div><div><b>⚡ COMBOS</b><small>Reward accuracy</small></div><div><b>🏆 SAVE</b><small>Local records</small></div>
+        </div>
+      </section>
+
+      <section id="screen-setup" class="screen">
+        <div class="panel wide">
+          <button class="back-btn" data-back="menu">← BACK</button>
+          <h2 id="setupTitle">SOLO CAMPAIGN</h2>
+          <p class="muted">Choose your battle configuration.</p>
+          <div class="setup-grid">
+            <div class="setup-block">
+              <label>TOPIC</label>
+              <div class="topic-grid" id="topicGrid"></div>
+            </div>
+            <div class="setup-block">
+              <label>DIFFICULTY</label>
+              <div class="choice-row" id="difficultyChoices">
+                <button data-diff="easy">EASY</button><button data-diff="normal" class="selected">NORMAL</button><button data-diff="hard">HARD</button>
+              </div>
+              <label>TIME PER QUESTION</label>
+              <div class="choice-row" id="timeChoices">
+                <button data-time="10">10 SEC</button><button data-time="20" class="selected">20 SEC</button><button data-time="30">30 SEC</button>
+              </div>
+              <div id="playerSetup" class="hidden">
+                <label>PLAYERS</label>
+                <div class="choice-row" id="playerChoices"><button data-players="2" class="selected">2</button><button data-players="3">3</button></div>
+                <label>PLAYER NAMES</label>
+                <div id="nameInputs" class="name-inputs"></div>
+              </div>
+            </div>
+          </div>
+          <button class="start-large" id="startGameBtn">START BATTLE ▶</button>
+        </div>
+      </section>
+
+      <section id="screen-game" class="screen">
+        <div class="game-hud">
+          <div class="hud-cell"><small>PLAYER</small><b id="hudPlayer">PLAYER 1</b></div>
+          <div class="hud-cell"><small>SCORE</small><b id="hudScore">0</b></div>
+          <div class="hud-cell"><small>STREAK</small><b id="hudStreak">0×</b></div>
+          <div class="hud-cell"><small>ROUND</small><b id="hudRound">1 / 6</b></div>
+          <div class="hud-cell timer-cell"><small>TIME</small><b id="hudTime">20</b></div>
+        </div>
+        <div class="progress"><div id="progressFill"></div></div>
+        <div class="game-layout">
+          <aside class="side-panel">
+            <div class="topic-badge" id="gameTopic">BINARY</div>
+            <div class="life-box"><span>STRIKES</span><div id="livesDisplay">♥ ♥</div></div>
+            <div class="powerups"><h4>POWER-UPS</h4><button id="fiftyBtn">50/50 <small>remove 2 choices</small></button><button id="freezeBtn">TIME FREEZE <small>+5 seconds</small></button><button id="doubleBtn">DOUBLE <small>2× next points</small></button></div>
+            <button class="pause-btn" id="pauseBtn">Ⅱ PAUSE</button>
+          </aside>
+          <div class="question-card">
+            <div class="q-meta"><span id="qType">CONVERSION</span><span id="qDifficulty">NORMAL</span></div>
+            <h3 id="questionText">Question loading...</h3>
+            <div id="answerArea" class="answers"></div>
+            <div id="feedback" class="feedback"></div>
+            <div class="consequence hidden" id="consequence"><b>CONSEQUENCE</b><span id="consequenceText"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-result" class="screen">
+        <div class="panel result-panel">
+          <div id="resultIcon" class="result-icon">🏆</div><div class="eyebrow">BATTLE COMPLETE</div><h2 id="resultTitle">MISSION COMPLETE</h2>
+          <div class="final-score" id="finalScore">0</div><p>POINTS</p>
+          <div class="result-stats"><div><b id="correctStat">0</b><small>CORRECT</small></div><div><b id="wrongStat">0</b><small>WRONG</small></div><div><b id="accuracyStat">0%</b><small>ACCURACY</small></div><div><b id="bestStreakStat">0×</b><small>BEST STREAK</small></div></div>
+          <div class="result-actions"><button class="main-btn" id="againBtn">↻ PLAY AGAIN</button><button class="main-btn alt" id="menuBtn">⌂ MAIN MENU</button></div>
+        </div>
+      </section>
+
+      <section id="screen-leaderboard" class="screen"><div class="panel wide"><button class="back-btn" data-back="menu">← BACK</button><h2>LOCAL LEADERBOARD</h2><div id="leaderboardList"></div><button class="danger-btn" id="clearScores">CLEAR RECORDS</button></div></section>
+    </main>
+
+    <div class="modal hidden" id="modal"><div class="modal-card"><button class="modal-close" id="modalClose">×</button><h2 id="modalTitle">HOW TO PLAY</h2><div id="modalBody"></div></div></div>
+    <div class="toast" id="toast"></div>
+  </div>
+  <script src="game.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+      });
+    }
+
+    let deferredInstallPrompt = null;
+    const installBtn = document.getElementById("installBtn");
+    window.addEventListener("beforeinstallprompt", event => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      installBtn.hidden = false;
+    });
+    installBtn.addEventListener("click", async () => {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      installBtn.hidden = true;
+    });
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      installBtn.hidden = true;
+    });
+  </script>
+</body>
+</html>
